@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <!-- name：指定映射的实体类
+        table:指定映射到的表名
+     -->
+    <class name="wei.entity.GameType" table="gametype">
+           <!-- name：指定Product类中的属性名
+                column:指定为id的字段名 
+                generator:生成策略为本地（默认自动增长）
+                user    uid, uname,password,credit,phone,isManager
+           -->
+        <id name="tid" column="tid">
+            <generator class="native"/>
+        </id>
+        <property name="typename" column="typename" length="20"/>
+        
+         <!-- 一对多关联映射 -->  
+        <set name="ggoods" cascade="delete" inverse="true" >  
+            <key column="uid" />  
+            <one-to-many class="wei.entity.GoldGood"/>  
+        </set> 
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <!-- name：指定映射的实体类
+        table:指定映射到的表名
+     -->
+    <class name="wei.entity.User" table="user">
+           <!-- name：指定Product类中的属性名
+                column:指定为id的字段名 
+                generator:生成策略为本地（默认自动增长）
+                user    uid, uname,password,credit,phone,isManager
+           -->
+        <id name="uid" column="uid">
+            <generator class="native"/>
+        </id>
+        <property name="uname" column="uname" length="20"/>
+        <property name="password" column="password" length="20"/>
+        <property name="credit" column="credit" type=""/>
+        <property name="phone" column="phone" />
+        <property name="isManager" column="isManager" />
+        <property name="tradeNum" column="tradeNum" />
+        <property name="isBan" column="isBan" />
+        <property name="regTime"  column="regTime" type="java.util.Date"/>
+        <property name="existCash" column="existCash" type="float" />
+        <!-- 一对多关联映射 -->  
+        <set name="ggoods" cascade="delete" inverse="true">  
+            <key column="uid" />  
+            <one-to-many class="wei.entity.GoldGood"/>  
+        </set> 
+    </class>
+</hibernate-mapping>

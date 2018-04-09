@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <!-- name：指定映射的实体类
+        table:指定映射到的表名
+     -->
+    <class name="wei.entity.Form" table="form">
+           <!-- name：指定Product类中的属性名
+                column:指定为id的字段名 
+                generator:生成策略为本地（默认自动增长）
+                user    uid, uname,password,credit,phone,isManager
+           -->
+        <id name="fid" column="fid">
+            <generator class="native"/>
+        </id>
+        <property name="subtime" column="subtime" type="java.util.Date"/>
+        <property name="totalPrice" column="totalprice" type="double"/>
+        <property name="fstate" column="fstate" type=""/>
+        <property name="fnumber" column="fnumber" />
+        <property name="reason" column="reason" length="100"/>
+        <property name="fgid" column="fgid" />
+        <property name="suid" column="suid" />
+        <property name="buid" column="buid" />
+        <property name="transfer" column="transfer" />
+        <property name="formId" column="formId" />
+        <property name="sellName" column="sellName" />
+        <property name="buyName" column="buyName" />
+        <property name="goodName" column="goodName" />
+         <!-- 多对一关联映射 -->  
+<!--         <many-to-one name="fgoods" class="wei.entity.GoldGood">   -->
+<!--              <column name="gid" />   -->
+<!--         </many-to-one> -->
+        
+<!--         <many-to-one name="sellUser" class="wei.entity.User" >   -->
+<!--              <column name="suid" />   -->
+<!--         </many-to-one>  -->
+        
+<!--         <many-to-one name="buyUser" class="wei.entity.User" >   -->
+<!--              <column name="buid" />   -->
+<!--         </many-to-one>  -->
+    </class>
+</hibernate-mapping>

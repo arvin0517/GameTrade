@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"    
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+         xmlns:p="http://www.springframework.org/schema/p"  
+         xmlns:aop="http://www.springframework.org/schema/aop"   
+         xmlns:context="http://www.springframework.org/schema/context"  
+         xmlns:jee="http://www.springframework.org/schema/jee"  
+         xmlns:tx="http://www.springframework.org/schema/tx"  
+         xsi:schemaLocation="
+             http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd    
+             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd  
+             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd  
+             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+             http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd  
+             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+
+
+    <!-- 数据库源定义 -->       
+	 <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+        destroy-method="close">
+        <property name="driverClass">
+            <value>com.mysql.jdbc.Driver</value>
+        </property>
+        <property name="jdbcUrl">
+            <value>jdbc:mysql://localhost:3306/game?useSSL=false</value>
+        </property>
+        <property name="user">
+            <value>root</value>
+        </property>
+        <property name="password">
+            <value>123456</value>
+        </property>
+        <property name="maxPoolSize">
+            <value>80</value>
+        </property>
+        <property name="minPoolSize">
+            <value>1</value>
+        </property>
+        <property name="initialPoolSize">
+            <value>1</value>
+        </property>
+        <property name="maxIdleTime">
+            <value>20</value>
+        </property>
+    </bean>
+
+
+    <!-- session工程接管 -->
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="mappingResources">
+            <list>
+                <value>wei/entity/User.hbm.xml</value>
+                <value>wei/entity/GoldGood.hbm.xml</value>
+                <value>wei/entity/GameType.hbm.xml</value>
+                <value>wei/entity/Form.hbm.xml</value>   
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                <prop key="show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>                
+                <prop key="hibernate.jdbc.batch_size">20</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <bean id="transactionManager"
+        class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+<!-- 配置注入Dao bean -->
+<bean id="userDao" class="wei.daoImpl.UserDaoImpl">
+		<property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+</bean>
+
+<bean id="loginDao" class="wei.daoImpl.LoginDaoImpl">
+		<property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+</bean>
+
+<bean id="registerDao" class="wei.daoImpl.RegisterDaoImpl">
+		<property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+</bean>
+
+<bean id="editUserDao" class="wei.daoImpl.EditUserDaoImpl">
+		<property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+</bean>
+
+<bean id="sellGoodsDao" class="wei.daoImpl.SellGoodsDaoImpl">
+		<property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+</bean>
+
+<bean id="manageGoodDao" class="wei.daoImpl.ManageGoodDaoImpl">
+		<property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+</bean>
+
+<bean id="buyGoodsDao" class="wei.daoImpl.BuyGoodsDaoImpl">
+		<property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+</bean>
+
+<bean id="manFormDao" class="wei.daoImpl.ManFormDaoImpl">
+		<property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+</bean>
+
+<!-- 配置注入Service bean -->
+<bean id="userService" class="wei.serviceImpl.UserServiceImpl">
+    <property name="userDao" ref="userDao"></property>
+</bean>
+
+<bean id="loginService" class="wei.serviceImpl.LoginServiceImpl">
+    <property name="loginDao" ref="loginDao"></property>
+</bean>
+
+<bean id="registerService" class="wei.serviceImpl.RegisterServiceImpl">
+    <property name="registerDao" ref="registerDao"></property>
+</bean>
+
+<bean id="editUserService" class="wei.serviceImpl.EditUserServiceImpl">
+    <property name="editUserDao" ref="editUserDao"></property>
+</bean>
+
+<bean id="sellGoodsService" class="wei.serviceImpl.SellGoodsServiceImpl">
+    <property name="sellGoodsDao" ref="sellGoodsDao"></property>
+</bean>
+
+<bean id="manageGoodService" class="wei.serviceImpl.ManageGoodServiceImpl">
+    <property name="manageGoodDao" ref="manageGoodDao"></property>
+</bean>
+
+<bean id="buyGoodsService" class="wei.serviceImpl.BuyGoodsServiceImpl">
+    <property name="buyGoodsDao" ref="buyGoodsDao"></property>
+</bean>
+
+<bean id="manFormService" class="wei.serviceImpl.ManFormServiceImpl">
+    <property name="manFormDao" ref="manFormDao"></property>
+</bean>
+
+
+<!-- 配置注入Action bean 这时Action类交由spring进行管理   
+ -->
+<bean id="userAction" class="wei.action.UserAction" scope="prototype">
+    <property name="userService" ref="userService"></property>
+</bean>
+
+<bean id="loginAction" class="wei.action.LoginAction" scope="prototype">
+    <property name="loginService" ref="loginService"></property>
+</bean>
+
+<bean id="registerAction" class="wei.action.RegisterAction" scope="prototype">
+    <property name="registerService" ref="registerService"></property>
+</bean>
+
+<bean id="editUserAction" class="wei.action.EditUserAction" scope="prototype">
+    <property name="editUserService" ref="editUserService"></property>
+</bean>
+
+<bean id="sellGoodsAction" class="wei.action.SellGoodsAction" scope="prototype">
+    <property name="sellGoodsService" ref="sellGoodsService"></property>
+</bean>
+
+<bean id="manageGoodAction" class="wei.action.ManageGoodAction" scope="prototype">
+    <property name="manageGoodService" ref="manageGoodService"></property>
+</bean>
+
+<bean id="buyGoodsAction" class="wei.action.BuyGoodsAction" scope="prototype">
+    <property name="buyGoodsService" ref="buyGoodsService"></property>
+</bean>
+
+<bean id="manFormAction" class="wei.action.ManFormAction" scope="prototype">
+    <property name="manFormService" ref="manFormService"></property>
+</bean>
+
+<!-- 分隔线 -->
+<aop:aspectj-autoproxy proxy-target-class="true" />
+
+    <aop:config  proxy-target-class="true">
+        <aop:advisor pointcut="execution(* service.*.*(..))" advice-ref="transactionAdvice" /> <!-- 配置哪些类的哪些方法参与事务 --> 
+    </aop:config>
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <!-- 配置事务传播特性 -->
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+        </tx:attributes>
+    </tx:advice>
+
+</beans>

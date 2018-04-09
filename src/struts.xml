@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+		"-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+		"http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+
+<!--    <constant name="struts.enable.DynamicMethodInvocation" value="false"></constant> -->
+<!--    <constant name="struts.devMode" value="true"></constant> -->
+
+    <package name="game" namespace="/" extends="struts-default">
+    
+                       <!--        拦截器                                -->
+      <!-- 注册拦截器 -->
+      <interceptors>
+        <interceptor name="auth" class="wei.interceptor.LoginInterceptor"></interceptor>
+<!--         自定义拦截器栈  组合defaultStack 和 auth -->
+        <interceptor-stack name="myStack">
+          <interceptor-ref name="defaultStack"></interceptor-ref>
+          <interceptor-ref name="auth"></interceptor-ref>
+        </interceptor-stack>
+      </interceptors>       
+    
+    
+    
+        <!-- 由于是spring注入Action类， class属性填写spring注入时指定的id -->
+       <action name="UserAction_login" class="userAction" method="login">
+           <result name="input">/login.jsp</result>
+           <result name="success" type="redirect">/mainFrame.jsp</result>
+       </action>
+       <action name="UserAction_saveUI" class="userAction" method="saveUI">
+           <result name="saveUI">/addUser.jsp</result>
+       </action>
+       <action name="UserAction_save" class="userAction" method="save">
+           <result name="saveError">/addUser.jsp</result>
+           <result name="saveSuccess" type="redirect">/login.jsp</result>
+       </action>
+       <action name="UserAction_findAll" class="userAction" method="findAll">
+          <result name="findAll">/manageAllUser.jsp</result>
+       </action>
+       
+       <action name="UserAction_delete" class="userAction" method="delete">
+         <result name="deleteSuccess" type="redirectAction">UserAction_findAll.action</result>
+       </action>
+       
+       <action name="UserAction_editPre" class="userAction" method="editPre">
+          <result name="editPre">/jsp/user/editUser.jsp</result>
+       </action>
+       <action name="UserAction_edit" class="userAction" method="edit">
+          <result name="editSuccess" type="redirect">/mainFrame.jsp</result>
+       </action>
+       
+
+       
+       <!--                     loginAction                               -->
+       
+        <action name="loginAction_logout" class="loginAction" method="logout">
+            <result name="logout" type="redirect">/mainFrame.jsp</result> 
+        <!--<result name="success" type="redirect">/mainFrame.jsp</result> -->
+        </action>
+        
+        <action name="loginAction_manageLogout" class="loginAction" method="manageLogout">
+            <result name="logoutManaSucc" type="redirect">/loginUser.jsp</result> 
+        <!--<result name="success" type="redirect">/mainFrame.jsp</result> -->
+        </action>
+        
+        <action name="UserAction_findInformByUid" class="userAction" method="findInformByUid">
+            <result name="findInformSucc" type="redirect">/personal_inform.jsp</result> 
+        </action>
+       
+       <!-- registerAction -->
+        <action name="registerAction_registerGo" class="registerAction" method="registerGo">
+            <result name="registerGo">/mainFrame.jsp</result> 
+        </action>
+        
+        <action name="registerAction_saveUser" class="registerAction" method="saveUser">
+            <result name="saveSucc" type="redirect">/loginUser.jsp</result> 
+        </action>
+        
+         <!-- editUserAction -->
+        <action name="editUserAction_check" class="editUserAction" method="check">
+            <result name="saveSucc" type="redirect">/loginUser.jsp</result> 
+        </action>
+        
+         <action name="editUserAction_editForPAT" class="editUserAction" method="editForPAT">
+            <result name="editSucc" type="redirect">/personal_inform.jsp</result> 
+        </action>
+        
+        <action name="editUserAction_editForPass" class="editUserAction" method="editForPass">
+            <result name="editPassSucc" type="redirect">/personal_pw.jsp</result> 
+        </action>
+        
+        <action name="sellGoodsAction_testSell" class="sellGoodsAction" method="testSell">
+            <result name="editPassSucc" type="redirect">/personal_pw.jsp</result> 
+        </action>
+        
+        <action name="sellGoodsAction_fingAllType" class="sellGoodsAction" method="fingAllType">
+            <result name="findAll">/sellGood.jsp</result>
+            <result name="login" type="redirect">/loginUser.jsp</result>
+            <!-- 引用自定义的拦截器栈 -->
+            <interceptor-ref name="myStack"></interceptor-ref> 
+        </action>
+        
+        <action name="sellGoodsAction_saveGood" class="sellGoodsAction" method="saveGood">
+            <result name="saveGSucc" >/mainFrame.jsp</result> 
+        </action>
+        
+        <action name="manageGoodAction_testManage" class="manageGoodAction" method="testManage">
+            <result name="" type="redirect">/</result> 
+        </action>
+        
+        <action name="manageGoodAction_findAllGoods" class="manageGoodAction" method="findAllGoods">
+            <result name="findAllGoods">/manageAllGoods.jsp</result> 
+        </action>
+        
+        <action name="manageGoodAction_passGood" class="manageGoodAction" method="passGood">
+            <result name="passSucc"  >/manageAllGoods.jsp</result> 
+        </action>
+        
+        <action name="manageGoodAction_refuseGood" class="manageGoodAction" method="refuseGood">
+            <result name="refuseSucc" >/manageAllGoods.jsp</result> 
+        </action>
+        
+        <action name="buyGoodsAction_findGoodsByTid" class="buyGoodsAction" method="findGoodsByTid">
+            <result name="findGoodsSucc" >/showGoodList.jsp</result>
+            <result name="findNull" >/findNull.jsp</result> 
+        </action>
+       
+        <action name="buyGoodsAction_testBuy" class="buyGoodsAction" method="testBuy">
+            <result name="" >/</result> 
+        </action>
+       
+        <action name="buyGoodsAction_findOneGoodById" class="buyGoodsAction" method="findOneGoodById">
+            <result name="findOneSucc" >/goldGoodDetail.jsp</result> 
+        </action>
+        
+        <action name="manFormAction_manFormTest" class="manFormAction" method="manFormTest">
+            <result name="" >/</result> 
+        </action>
+        
+        <action name="manFormAction_getGoodByGid" class="manFormAction" method="getGoodByGid">
+            <result name="goodToForm" type="redirect" >/createform.jsp</result>
+            <result name="login" type="redirect" >/loginUser.jsp</result>
+            <!-- 引用自定义的拦截器栈 -->
+            <interceptor-ref name="myStack"></interceptor-ref>  
+        </action>
+        
+        <action name="manFormAction_saveForm" class="manFormAction" method="saveForm">
+            <result name="saveFormSucc" >/buySucc.jsp</result> 
+        </action>
+        
+        <action name="manageGoodAction_findGoodListByUid" class="manageGoodAction" method="findGoodListByUid">
+            <result name="findGoodsByUidSucc" >/personal_goodlist.jsp</result> 
+        </action>
+        
+        <action name="manFormAction_findFormListByUid" class="manFormAction" method="findFormListByUid">
+            <result name="findFormListSucc" >/personal_formlist.jsp</result> 
+        </action>
+        
+        <action name="manFormAction_findAllForm" class="manFormAction" method="findAllForm">
+            <result name="findAllFormSucc" >/manageAllForms.jsp</result> 
+        </action>
+        
+        <action name="manageGoodAction_changeGoodState" class="manageGoodAction" method="changeGoodState">
+            <result name="changStateSucc" >/personal_goodlist.jsp</result> 
+        </action>
+        
+        <action name="manageGoodAction_changeGoodStateUp" class="manageGoodAction" method="changeGoodStateUp">
+            <result name="changStateUpSucc" >/personal_goodlist.jsp</result> 
+        </action>
+        
+        <action name="manageGoodAction_deleteGoodOfUser" class="manageGoodAction" method="deleteGoodOfUser">
+            <result name="deleteGoodSucc" >/personal_goodlist.jsp</result> 
+        </action>
+        
+        <action name="manageGoodAction_agreeBackBySeller" class="manageGoodAction" method="agreeBackBySeller">
+            <result name="agreeBackSucc" >/personal_goodlist.jsp</result> 
+        </action>
+        
+        <action name="manageGoodAction_refuseBackBySeller" class="manageGoodAction" method="refuseBackBySeller">
+            <result name="sellerRefuseBackSucc" >/personal_goodlist.jsp</result> 
+        </action>
+        
+        <action name="manFormAction_cancelBackForm" class="manFormAction" method="cancelBackForm">
+            <result name="cancelBackSucc" >/personal_formlist.jsp</result> 
+        </action>
+        
+        <action name="manFormAction_finishForm" class="manFormAction" method="finishForm">
+            <result name="finishFormSucc" >/personal_formlist.jsp</result> 
+        </action>
+        
+        <action name="manFormAction_passBackForm" class="manFormAction" method="passBackForm">
+            <result name="passBackSucc" >/manageAllForms.jsp</result> 
+        </action>
+        
+        <action name="manFormAction_refuseBackForm" class="manFormAction" method="refuseBackForm">
+            <result name="refuseBackSucc" >/manageAllForms.jsp</result> 
+        </action>
+        
+        <action name="manFormAction_deleteForm" class="manFormAction" method="deleteForm">
+            <result name="deleteFormSucc" >/personal_formlist.jsp</result> 
+        </action>
+        
+        <action name="UserAction_banUesr" class="userAction" method="banUesr">
+          <result name="banUserSucc" >/manageAllUser.jsp</result>
+       </action>
+       
+       <action name="UserAction_cancalBanUser" class="userAction" method="cancalBanUser">
+          <result name="cancalBanSucc" >/manageAllUser.jsp</result>
+       </action>
+        
+    </package>
+    
+    <!-- 为了让ajax可以调用Spring中的Action 配置ajax的package -->
+    <package name="ajax_json" extends="json-default">
+    
+<!--         本处的id就是ajax url的值，class引用了Spring 配置Action的id  -->
+         <action name="loginAction_login" class="loginAction" method="login">
+                     <result name="success" type="json">
+                     	<param name="root">result</param>
+                     </result>
+         </action> 
+         
+         <action name="registerAction_checkUserByName" class="registerAction" method="checkUserByName">
+                     <result name="success" type="json">
+                     	<param name="root">result</param>
+                     </result>
+         </action> 
+         
+         <action name="manFormAction_backFormByFid" class="manFormAction" method="backFormByFid">
+                     <result name="success" type="json">
+                     	<param name="root">result</param>
+                     </result>
+         </action>  
+         
+         <action name="loginAction_findUserByUname" class="loginAction" method="findUserByUname">
+                     <result name="success" type="json">
+                     	<param name="root">result</param>
+                     </result>
+         </action>
+         
+         <action name="loginAction_getCheckCode" class="loginAction" method="getCheckCode">
+                     <result name="success" type="json">
+                     	<param name="root">result</param>
+                     </result>
+         </action>    
+  
+    </package>
+    
+</struts>
